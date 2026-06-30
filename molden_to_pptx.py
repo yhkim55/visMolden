@@ -1,5 +1,6 @@
 import os
 import sys
+import shutil
 import argparse
 import logging
 import subprocess
@@ -86,8 +87,10 @@ def main():
              'If omitted, uses orbitals with fractional occupancy (active space).',
     )
     parser.add_argument("--dir")
-    parser.add_argument("--output", default="",
+    parser.add_argument("--output", default=None,
                         help='output pptx file, defaults as MOLDEN_orbitals.pptx')
+    parser.add_argument("--erase_dir", default=True, action='store_false',
+                        help='Add this option to preserve cube & pngs in --dir')
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -104,6 +107,9 @@ def main():
     else:
         orb_indices = parse_indices(args.indices)
 
+    if args.output is None:
+        args.output = args.molden.replace('.molden', '_orbitals.pptx')
+
     png_map, occ = generate_orbital_images(
         os.path.abspath(args.molden), orb_indices, args.dir
     )
@@ -116,6 +122,9 @@ def main():
     )
 
     logging.info(f"Created PowerPoint: {args.output}")
+
+    if args.erase_dir:
+        shutil.rmtree(args.dir)
 
 
 if __name__ == "__main__":
