@@ -12,14 +12,6 @@ slide grid with occupation numbers labeled.
 
 ## Usage
 
-### Submit as a Slurm job
-
-```bash
-./run.sh /path/to/file.molden 15-30,35,38
-```
-
-### Run directly
-
 ```bash
 python molden_to_pptx.py /path/to/file.molden 15-30,35,38
 ```
