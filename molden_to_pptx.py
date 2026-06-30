@@ -86,7 +86,8 @@ def main():
              'If omitted, uses orbitals with fractional occupancy (active space).',
     )
     parser.add_argument("--dir")
-    parser.add_argument("--output", default="orbitals.pptx")
+    parser.add_argument("--output", default="",
+                        help='output pptx file, defaults as MOLDEN_orbitals.pptx')
     args = parser.parse_args()
 
     logging.basicConfig(
