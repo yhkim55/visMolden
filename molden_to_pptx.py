@@ -134,9 +134,9 @@ def generate_orbital_images(molden_fn, orb_indices, out_dir, orient_atoms=None):
         for cube_fn in cubefiles:
             png_fn = cube_fn.replace('cube', 'png')
             if do_orient:
-                subprocess.run(f'xyzrender {cube_fn} --mo --ref {tmp_xyz} --hy --idx -o {png_fn}', shell=True)
+                subprocess.run(f'xyzrender {cube_fn} --mo --ref {tmp_xyz} --config paton --hy --idx -o {png_fn}', shell=True)
             else:
-                subprocess.run(f'xyzrender {cube_fn} --mo --no-orient --hy --idx -o {png_fn}', shell=True)
+                subprocess.run(f'xyzrender {cube_fn} --mo --no-orient --config paton --hy --idx -o {png_fn}', shell=True)
         
 
     finally:
@@ -197,7 +197,7 @@ def main():
     parser.add_argument("--dir")
     parser.add_argument("--output", default=None,
                         help='output pptx file, defaults as MOLDEN_orbitals.pptx')
-    parser.add_argument("--erase_dir", default=True, action='store_false',
+    parser.add_argument("--keep_dir", default=True, action='store_false',
                         help='Add this option to preserve cube & pngs in --dir')
     parser.add_argument("--orient_atoms", default=None,
                         help='Three atom indices(0-idx) for manual orientation, separated by comma (ex. 0,3,7)')
@@ -236,7 +236,7 @@ def main():
 
     logging.info(f"Created PowerPoint: {args.output}")
 
-    if args.erase_dir:
+    if args.keep_dir:
         shutil.rmtree(args.dir)
 
 

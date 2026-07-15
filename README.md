@@ -25,8 +25,11 @@ Arguments:
 - `--dir` — working directory for cube/PNG files (default:
   `<molden_basename>_img`).
 - `--output` — output PPTX path (default: `<molden_basename>_orbitals.pptx`).
-- `--erase_dir` — pass this flag to keep the cube/PNG working directory
+- `--keep_dir` — pass this flag to keep the cube/PNG working directory
   instead of deleting it after the PPTX is built (deleted by default).
+- `--orient_atoms` - three atom indices (0-indexed) for which you intend to
+  see in perpendicular angle. (ex: 0,5,7) If not given, follow the default
+  orientation of xyzrender.
 
 ## Output
 
