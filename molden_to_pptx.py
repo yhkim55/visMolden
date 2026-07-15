@@ -141,7 +141,8 @@ def generate_orbital_images(molden_fn, orb_indices, out_dir, orient_atoms=None):
 
     finally:
         os.chdir(cwd)
-        pathlib.Path.unlink(tmp_xyz)
+        if orient_atoms is not None:
+            pathlib.Path.unlink(tmp_xyz)
 
 
     png_map = {idx: os.path.join(out_dir, f"orb{idx:03d}.png") for idx in orb_indices}
