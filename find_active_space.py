@@ -1,5 +1,3 @@
-import sys
-
 def get_occup(molden_fn):
     '''
     Takes a molden file and returns list of orbital occupancies
@@ -21,6 +19,7 @@ def find_active_space(molden_fn):
     return as_idx, occup_as
 
 if __name__ == '__main__':
+    import sys
     molden_fn = sys.argv[1]
     active_space, occup = find_active_space(molden_fn)
     for n in active_space:
