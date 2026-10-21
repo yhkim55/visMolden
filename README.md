@@ -1,8 +1,10 @@
 # visMolden
 
-Report a CASSCF calculation as a 16:9 PowerPoint deck of active-space
-orbitals. Each orbital is written to a cube file with pyscf, rendered with
-xyzrender, and placed in an 8-column grid labeled with its occupation.
+Report molecular orbitals as a PowerPoint deck of orbitals. Each orbital is written 
+to a cube file with pyscf, rendered with xyzrender, and placed in a slide labeled with its occupation.
+
+Designed as a reporting tool for CASSCF (and/or post-CASSCF) calculations,
+but can be used in general purpose.
 
 The view can be oriented so that chosen atoms (e.g. the reacting atoms of a
 reaction step) are seen most distinctively: spread out in the image plane and
@@ -12,31 +14,30 @@ not hidden behind other atoms.
 
 - Python with `pyscf`, `python-pptx`, `Pillow`, `numpy`
 - `xyzrender` importable from the same Python
-- Slurm (`sbatch`) if using `run.sh`
 
 ## Usage
 
 ```bash
 # orient on "reacting_atoms" -> "idx" from bond_changes.json
-python cas_report.py casscf.molden bond_changes.json
+python vismolden.py casscf.molden bond_changes.json
 
 # orient on atoms given directly (0-indexed, same convention as the json)
-python cas_report.py casscf.molden --atoms 25,27,37,21
+python vismolden.py casscf.molden --atoms 25,27,37,21
 
 # xyzrender's default (PCA) orientation
-python cas_report.py casscf.molden
+python vismolden.py casscf.molden
 ```
 
 Arguments:
 
-- `molden` — CASSCF Molden file (natural orbitals).
+- `molden` — Molden file (e.g. CASSCF natural orbitals).
 - `bond_changes` (optional) — json with `"reacting_atoms": {"idx": [...]}`
   (0-indexed atoms).
 - `--atoms` — 3 or more 0-indexed atoms, e.g. `25,27,37` or `21-23,25`.
   Overrides the json. The first atom is placed on the left of the image.
 - `--orbitals` — 0-indexed orbitals, e.g. `89-96`. If omitted, defaults to
   the orbitals with fractional occupancy (`1e-4 < occ < 2 - 1e-4`).
-- `-o`, `--output` — output PPTX path (default: `<molden_basename>_cas_report.pptx`).
+- `-o`, `--output` — output PPTX path (default: `<molden_basename>_orbitals.pptx`).
 - `--one-based` — print 1-based orbital indices on the slides.
 - `--iso` — isovalue (xyzrender default 0.05).
 - `--res` — cube grid points per axis (default 80).
@@ -54,11 +55,11 @@ Arguments:
 
 ## Output
 
-Slides are 13.333 x 7.5 in (16:9). Each slide has:
+Each slide has:
 
 - title `CAS(ne, mo) <absolute molden path>`
 - subtitle `Orbital index: 89-96` listing the orbitals on that slide
-- an 8-column grid of orbital images, each labeled `Occ=y.zzz` (Arial 12 pt);
+- an 8-column grid of orbital images, each labeled `Occ=y.zzz`;
   the number of rows per slide follows from the image aspect ratio
 
 All images share one crop box, so the molecule has the same size and position
@@ -79,9 +80,3 @@ positions through the xyzrender Python API with auto-orientation off;
 xyzrender maps the cube grid onto the rotated atoms, so the lobes follow. The
 result is deterministic for a given geometry and atom list.
 
-## Files
-
-- `cas_report.py` — the whole pipeline: cube generation, orientation,
-  rendering, and PPTX layout.
-- `run.sh` — Slurm submission wrapper for `cas_report.py` (not tracked by
-  git; `*.sh` is in `.gitignore`).
